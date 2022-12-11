@@ -14,28 +14,34 @@ Latest instructions are [here](https://docs.docker.com/engine/install/ubuntu/) o
 mkdir mqtt5
 cd mqtt5
 
+# for storing mosquitto.conf and pwfile (for password)
+mkdir config
+
 ```
 
 ## Create Mosquitto config file - mosquitto.conf
 ```bash
-nano mosquitto.conf
+nano config/mosquitto.conf
 ```
 
-Basic configuration file content below
+Basic configuration file content below including websocket config
 ```
 allow_anonymous false
 listener 1883
+listener 9001
+protocol websockets
 persistence true
+log_dest file /mosquitto/log/mosquitto.log
 password_file /mosquitto/config/pwfile
 ```
 
 ## Create Mosquitto password file - pwfile
 
 ```bash
-touch pwfile
+touch config/pwfile
 ```
 
-## Create docker-compose file called 'mqtt5.yml'
+## Create docker-compose file called 'docker-compose.yml'
 
 ```yml
 
@@ -46,17 +52,18 @@ services:
     image: eclipse-mosquitto
     container_name: mqtt5
     ports:
-      - "1883:1883" #default mqtt port (plain MQTT) / 8883 for TLS
+      - "1883:1883" #default mqtt port
+      - "9001:9001" #default mqtt port for websockets
     volumes:
-      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:rw #mapped config file
-      - ./pwfile:/mosquitto/config/pwfile:rw # mapped password file
-      - mqtt5_data:/mosquitto/data:rw # volume mapped for data
-      - mqtt5_log:/mosquitto/log:rw # volume mapped for log
+      - ./config:/mosquitto/config:rw
+      - ./data:/mosquitto/data:rw
+      - ./log:/mosquitto/log:rw
 
-# volumes for mapping data and log
+# volumes for mapping data,config and log
 volumes:
-  mqtt5_data:
-  mqtt5_log:
+  config:
+  data:
+  log:
 
 networks:
   default:
@@ -68,7 +75,7 @@ networks:
 
 ```bash
 
-sudo docker-compose -f mqtt5.yml -p mqtt5 up -d
+sudo docker-compose -p mqtt5 up -d
 
 ```
 
