@@ -67,6 +67,14 @@ sudo docker-compose -f mqtt5.yml -p mqtt5 up -d
 
 ```
 
+### Check if the container is up and working
+
+```bash
+
+sudo docker ps
+
+```
+
 ## Time to test !!!
 
 ### Install mosquitto client tools for testing
