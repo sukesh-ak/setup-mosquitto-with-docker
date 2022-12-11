@@ -23,9 +23,16 @@ nano mosquitto.conf
 
 Basic configuration file content below
 ```
-allow_anonymous true
+allow_anonymous false
 listener 1883
 persistence true
+password_file /mosquitto/config/pwfile
+```
+
+## Create Mosquitto password file - pwfile
+
+```bash
+touch pwfile
 ```
 
 ## Create docker-compose file called 'mqtt5.yml'
@@ -39,11 +46,12 @@ services:
     image: eclipse-mosquitto
     container_name: mqtt5
     ports:
-      - "1883:1883" #default mqtt port
+      - "1883:1883" #default mqtt port (plain MQTT) / 8883 for TLS
     volumes:
-      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:rw
-      - mqtt5_data:/mosquitto/data:rw
-      - mqtt5_log:/mosquitto/log:rw
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:rw #mapped config file
+      - ./pwfile:/mosquitto/config/pwfile:rw # mapped password file
+      - mqtt5_data:/mosquitto/data:rw # volume mapped for data
+      - mqtt5_log:/mosquitto/log:rw # volume mapped for log
 
 # volumes for mapping data and log
 volumes:
@@ -56,7 +64,7 @@ networks:
 
 ```
 
-## Create docker container for mqtt
+## Create and run docker container for MQTT
 
 ```bash
 
@@ -64,11 +72,26 @@ sudo docker-compose -f mqtt5.yml -p mqtt5 up -d
 
 ```
 
-### Check if the container is up and working
+### Check if the container is up and working (note down container-id)
 
 ```bash
 
 sudo docker ps
+
+```
+
+## Create a user/password in the pwfile
+
+```bash
+
+# login interactively into the mqtt container
+sudo docker exec -it <container-id> sh
+
+# add user and it will prompt for password
+mosquitto_passwd -c /mosquitto/config/pwfile user1
+
+# delete user command format
+mosquitto_passwd -D /mosquitto/config/pwfile <user-name-to-delete>
 
 ```
 
@@ -85,7 +108,11 @@ sudo apt install mosquitto-clients
 
 ```bash
 
+# Without authentication
 mosquitto_sub -v -t 'hello/topic'
+
+# With authentication
+mosquitto_sub -v -t 'hello/topic' -u user1 -P <password>
 
 ```
 
@@ -93,6 +120,10 @@ mosquitto_sub -v -t 'hello/topic'
 
 ```bash
 
+# Without authentication
 mosquitto_pub -t 'hello/topic' -m 'hello MQTT'
+
+# With authentication
+mosquitto_pub -t 'hello/topic' -m 'hello MQTT' -u user1 -P <password>
 
 ```
