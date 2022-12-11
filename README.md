@@ -4,11 +4,8 @@ These instructions will work on any Debian based OS including Ubuntu, RaspberryP
 _By default the config allows only to use local connections for security reasons._
 
 ## Install docker
-```bash
 
-sudo apt install docker.io
-
-```
+Latest instructions are [here](https://docs.docker.com/engine/install/ubuntu/) on docker website.
 
 ## Create base folder for mqtt configuration
 
