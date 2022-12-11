@@ -3,11 +3,11 @@ These instructions will work on any Debian based OS including Ubuntu, RaspberryP
 (For non-Debian distros, commands for installation need to be tweaked)  
 _By default the config allows only to use local connections for security reasons._
 
-## Install docker
+## 1. Install docker
 
 Latest instructions are [here](https://docs.docker.com/engine/install/ubuntu/) on docker website.
 
-## Create base folder for mqtt configuration
+## 2. Create base folder for mqtt configuration
 
 ```bash
 
@@ -19,7 +19,7 @@ mkdir config
 
 ```
 
-## Create Mosquitto config file - mosquitto.conf
+## 3. Create Mosquitto config file - mosquitto.conf
 ```bash
 nano config/mosquitto.conf
 ```
@@ -35,13 +35,13 @@ log_dest file /mosquitto/log/mosquitto.log
 password_file /mosquitto/config/pwfile
 ```
 
-## Create Mosquitto password file - pwfile
+## 4. Create Mosquitto password file - pwfile
 
 ```bash
 touch config/pwfile
 ```
 
-## Create docker-compose file called 'docker-compose.yml'
+## 5. Create docker-compose file called 'docker-compose.yml'
 
 ```yml
 
@@ -71,7 +71,7 @@ networks:
 
 ```
 
-## Create and run docker container for MQTT
+## 6. Create and run docker container for MQTT
 
 ```bash
 
@@ -87,7 +87,7 @@ sudo docker ps
 
 ```
 
-## Create a user/password in the pwfile
+## 7. Create a user/password in the pwfile
 
 ```bash
 
@@ -102,7 +102,7 @@ mosquitto_passwd -D /mosquitto/config/pwfile <user-name-to-delete>
 
 ```
 
-## Time to test !!!
+## 8. Time to test !!!
 
 ### Install mosquitto client tools for testing
 ```bash
