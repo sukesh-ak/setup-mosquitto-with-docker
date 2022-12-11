@@ -123,7 +123,7 @@ mosquitto_sub -v -t 'hello/topic' -u user1 -P <password>
 
 # Alternate way in url format
 # Format => mqtt(s)://[username[:password]@]host[:port]/topic
-mosquitto_sub -v -L mqtt://sukesh:abcd12345@localhost/test/topic
+mosquitto_sub -v -L mqtt://user1:abcd12345@localhost/test/topic
 
 ```
 
@@ -139,6 +139,6 @@ mosquitto_pub -t 'hello/topic' -m 'hello MQTT' -u user1 -P <password>
 
 # Alternate way in url format 
 # Format => mqtt(s)://[username[:password]@]host[:port]/topic
-mosquitto_pub -L mqtt://sukesh:abcd12345@localhost/test/topic -m 'hello MQTT'
+mosquitto_pub -L mqtt://user1:abcd12345@localhost/test/topic -m 'hello MQTT'
 
 ```
