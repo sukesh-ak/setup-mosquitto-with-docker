@@ -41,9 +41,9 @@ services:
     ports:
       - "1883:1883" #default mqtt port
     volumes:
-      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - mqtt5_data:/mosquitto/data
-      - mqtt5_log:/mosquitto/log
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:rw
+      - mqtt5_data:/mosquitto/data:rw
+      - mqtt5_log:/mosquitto/log:rw
 
 # volumes for mapping data and log
 volumes:
