@@ -5,7 +5,8 @@ _By default the config allows only to use local connections for security reasons
 
 ## 1. Install docker
 
-Latest instructions are [here](https://docs.docker.com/engine/install/ubuntu/) on docker website.
+Latest instructions are [here](https://docs.docker.com/engine/install/ubuntu/) on docker website.  
+You can also use this script - [install-docker.sh](/install-docker.sh)
 
 ## 2. Create base folder for mqtt configuration
 
@@ -31,8 +32,9 @@ listener 1883
 listener 9001
 protocol websockets
 persistence true
-log_dest file /mosquitto/log/mosquitto.log
 password_file /mosquitto/config/pwfile
+persistence_file mosquitto.db
+persistence_location /mosquitto/data/
 ```
 
 ## 4. Create Mosquitto password file - pwfile
