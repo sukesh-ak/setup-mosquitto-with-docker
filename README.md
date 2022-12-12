@@ -102,6 +102,12 @@ mosquitto_passwd -c /mosquitto/config/pwfile user1
 # delete user command format
 mosquitto_passwd -D /mosquitto/config/pwfile <user-name-to-delete>
 
+# type 'exit' to exit out of docker container prompt
+
+```
+Then restart the container 
+```bash
+sudo docker restart <container-id>
 ```
 
 ## 8. Time to test !!!
