@@ -1,7 +1,7 @@
 # How to setup Mosquitto MQTT Broker using docker 
 These instructions will work on any Debian based OS including Ubuntu, RaspberryPi, WSL2 etc...  
 (For non-Debian distros, commands for installation need to be tweaked)  
-_By default the config allows only to use local connections for security reasons._
+_By default the config allows only to use local connections for security reasons but since authentication is enabled below, that's not the case._
 
 ## 1. Install docker
 
@@ -123,7 +123,7 @@ mosquitto_sub -v -t 'hello/topic' -u user1 -P <password>
 
 # Alternate way in url format
 # Format => mqtt(s)://[username[:password]@]host[:port]/topic
-mosquitto_sub -v -L mqtt://user1:abcd12345@localhost/test/topic
+mosquitto_sub -v -L mqtt://user1:abc123@localhost/test/topic
 
 ```
 
@@ -139,6 +139,6 @@ mosquitto_pub -t 'hello/topic' -m 'hello MQTT' -u user1 -P <password>
 
 # Alternate way in url format 
 # Format => mqtt(s)://[username[:password]@]host[:port]/topic
-mosquitto_pub -L mqtt://user1:abcd12345@localhost/test/topic -m 'hello MQTT'
+mosquitto_pub -L mqtt://user1:abc123@localhost/test/topic -m 'hello MQTT'
 
 ```
