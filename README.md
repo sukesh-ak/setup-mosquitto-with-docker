@@ -76,7 +76,10 @@ networks:
 ## 6. Create and run docker container for MQTT
 
 ```bash
+# In case you don't have docker-compose you can install it
+sudo apt install docker-compose
 
+# Run the docker container for mqtt
 sudo docker-compose -p mqtt5 up -d
 
 ```
