@@ -150,3 +150,9 @@ mosquitto_pub -t 'hello/topic' -m 'hello MQTT' -u user1 -P <password>
 mosquitto_pub -L mqtt://user1:abc123@localhost/test/topic -m 'hello MQTT'
 
 ```
+## You can also install a nice MQTT Web Client
+Read more about it here => https://mqttx.app/  
+
+```bash
+sudo docker run -d --name mqttx-web -p 80:80 emqx/mqttx-web
+```
