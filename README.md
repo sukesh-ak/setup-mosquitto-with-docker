@@ -60,6 +60,7 @@ services:
       - ./config:/mosquitto/config:rw
       - ./data:/mosquitto/data:rw
       - ./log:/mosquitto/log:rw
+    restart: unless-stopped
 
 # volumes for mapping data,config and log
 volumes:
