@@ -166,3 +166,12 @@ sudo docker run -d --name mqttx-web -p 80:80 emqx/mqttx-web
 
 ## Source/Reference for Mosquitto
 Github => https://github.com/eclipse/mosquitto
+
+##
+![Static Badge](https://img.shields.io/badge/SPONSORING-red?style=for-the-badge)    
+If you use my projects or like them, consider sponsoring me. Anything helps and encourages me to keep going.  
+See details here: https://github.com/sponsors/sukesh-ak  
+
+Your sponsorship would help me not only maintain the projects I'm involved in, but also support my other community activities and purchase hardware for testing these libraries. If you're an individual user who has enjoyed my projects or benefited from my community work, please consider donating as a sign of appreciation. If you run a business that uses my work in your products, sponsoring my development makes good business sense: it ensures that the projects your product relies on stay healthy and actively maintained.
+
+Thank you for considering supporting my work!
