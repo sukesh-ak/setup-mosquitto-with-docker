@@ -100,10 +100,10 @@ sudo docker ps
 # login interactively into the mqtt container
 sudo docker exec -it <container-id> sh
 
-# Create new passworkd file and add user and it will prompt for password
+# Create new password file and add user and it will prompt for password
 mosquitto_passwd -c /mosquitto/config/pwfile user1
 
-# Add additional users remove the -c option and it will prompt for password
+# Add additional users (remove the -c option) and it will prompt for password
 mosquitto_passwd /mosquitto/config/pwfile user2
 
 # delete user command format
@@ -113,7 +113,7 @@ mosquitto_passwd -D /mosquitto/config/pwfile <user-name-to-delete>
 
 ```
 
-Command line help for `mosquitto_passwd` above
+Command line help for `mosquitto_passwd` command above
 ```bash
 mosquitto_passwd is a tool for managing password files for mosquitto.
 
