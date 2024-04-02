@@ -1,6 +1,7 @@
 # How to setup Mosquitto MQTT Broker using docker 
 These instructions will work on any Debian based OS including Ubuntu, RaspberryPi, WSL2 etc...  
 (For non-Debian distros, commands for installation need to be tweaked)  
+
 _By default the config allows only to use local connections for security reasons but since authentication is enabled below, that's not the case._
 
 ## 1. Install docker
@@ -114,7 +115,7 @@ mosquitto_passwd -D /mosquitto/config/pwfile <user-name-to-delete>
 ```
 
 Command line help for `mosquitto_passwd` command above
-```bash
+```
 mosquitto_passwd is a tool for managing password files for mosquitto.
 
 Usage: mosquitto_passwd [-H sha512 | -H sha512-pbkdf2] [-c | -D] passwordfile username
