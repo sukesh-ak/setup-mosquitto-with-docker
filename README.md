@@ -74,6 +74,103 @@ networks:
     name: mqtt5-network
 
 ```
+### 5.1 Public facing Mosquitto Websocket Server with Free SSL using CaddyServer
+Setup and automate FREE valid SSL for Mosquitto Websocket (WSS), using [Caddy Server](https://caddyserver.com/) with very minimal effort.
+
+<details>
+<summary>Click here to expand for instructions</summary>
+
+#### Setting up CaddyServer
+
+Lets check the steps for setting it up  
+- Create folders for Caddy data and config
+- Configure DNS with A record pointing to your MQTT public IP address  
+- Create a config file called 'Caddyfile'
+- Create a combined docker-compose file with Caddy + Mosquitto
+- Create containers using docker-compose run 
+
+#### Create folders for Caddy
+```bash
+# Caddy data & config files where certificates etc are stored
+mkdir caddy_data
+mkdir caddy_config
+```
+
+#### DNS Setup
+```bash
+# Create a DNS A/AAAA record pointing your domain to the public IP address
+mqtt.domain.com  A  <public-IP-address-for-MQTT-instance>
+```
+Make sure to wait for the DNS record to complete propagation (depending on TTL). Otherwise automatic SSL creation would not work. 
+
+#### Caddyfile for configuration
+Caddy uses 2 volumes for data (storing certificates etc) & config.  
+Create a file called 'Caddyfile' in the local folder for configuration, which will be mapped to /etc/caddy/Caddyfile through docker-compose file as below.
+
+#### Content of configuration file called 'Caddyfile' 
+```bash
+# Config file in the current folder
+touch Caddyfile
+```
+_Add below content to `Caddyfile`_ created above.
+```
+mqtt.domain.com {
+        reverse_proxy ws://mqtt5:9001
+}
+```
+
+#### Combined docker-compose.yml
+```yaml
+version: "3.7"
+services:
+  # mqtt5 eclipse-mosquitto
+  mqtt5:
+    image: eclipse-mosquitto
+    container_name: mqtt5
+    ports:
+      - "1883:1883" #default mqtt port
+      - "9001:9001" #default mqtt port for websockets
+    volumes:
+      - ./config:/mosquitto/config:rw
+      - ./data:/mosquitto/data:rw
+      - ./log:/mosquitto/log:rw
+    restart: unless-stopped
+
+  # caddy for HTTPS and reverse-proxy
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+
+# volumes for mapping data,config and log
+volumes:
+  config:
+  data:
+  log:
+  caddy_data:
+  caddy_config:
+
+networks:
+  default:
+    # Caddy and mosquitto should be in the same docker network
+    name: caddy-mqtt
+```
+
+```bash
+# MQTT Connection URL would be 
+# WSS => Websocket Secure with SSL
+wss://mqtt.domain.com:443
+```
+
+</details>
 
 ## 6. Create and run docker container for MQTT
 
@@ -83,15 +180,12 @@ sudo apt install docker-compose
 
 # Run the docker container for mqtt
 sudo docker-compose -p mqtt5 up -d
-
 ```
 
 ### Check if the container is up and working (note down container-id)
 
 ```bash
-
 sudo docker ps
-
 ```
 
 ## 7. Create a user/password in the pwfile
