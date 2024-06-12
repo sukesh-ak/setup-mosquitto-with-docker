@@ -74,8 +74,10 @@ networks:
     name: mqtt5-network
 
 ```
-### 5.1 Public facing Mosquitto Websocket Server with Free SSL using CaddyServer
-Setup and automate FREE valid SSL for Mosquitto Websocket (WSS), using [Caddy Server](https://caddyserver.com/) with very minimal effort.
+### 5.1 Public facing Mosquitto Websocket Server with Free SSL using 
+
+> [!NOTE]  
+> Setup and automate FREE valid SSL for Mosquitto Websocket (WSS), using [Caddy Server](https://caddyserver.com/) with very minimal effort.
 
 <details>
 <summary>Click here to expand for instructions</summary>
