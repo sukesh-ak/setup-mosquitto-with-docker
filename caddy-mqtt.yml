@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  # mqtt5 eclipse-mosquitto
+  mqtt5:
+    image: eclipse-mosquitto
+    container_name: mqtt5
+    ports:
+      - "1883:1883" #default mqtt port
+      - "9001:9001" #default mqtt port for websockets
+    volumes:
+      - ./config:/mosquitto/config:rw
+      - ./data:/mosquitto/data:rw
+      - ./log:/mosquitto/log:rw
+    restart: unless-stopped
+
+  # caddy for HTTPS and reverse-proxy
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+
+# volumes for mapping data,config and log
+volumes:
+  config:
+  data:
+  log:
+  caddy_data:
+  caddy_config:
+
+networks:
+  default:
+    name: caddy-mqtt
