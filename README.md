@@ -171,7 +171,8 @@ networks:
 # WSS => Websocket Secure with SSL
 wss://mqtt.domain.com:443
 ```
-
+#### Using MQQTX Client
+![alt text](mqttx-client.png)
 </details>
 
 ## 6. Create and run docker container for MQTT
