@@ -171,7 +171,7 @@ networks:
 # WSS => Websocket Secure with SSL
 wss://mqtt.domain.com:443
 ```
-#### Using MQQTX Client
+#### Using MQTTX Client
 ![alt text](mqttx-client.png)
 </details>
 
