@@ -1,6 +1,7 @@
-# How to setup Mosquitto MQTT Broker using docker 
+# How to setup Mosquitto MQTT Broker using docker
+
 These instructions will work on any Debian based OS including Ubuntu, RaspberryPi, WSL2 etc...  
-(For non-Debian distros, commands for installation need to be tweaked)  
+(For non-Debian distros, commands for installation need to be tweaked)
 
 _By default the config allows only to use local connections for security reasons but since authentication is enabled below, that's not the case._
 
@@ -22,11 +23,13 @@ mkdir config
 ```
 
 ## 3. Create Mosquitto config file - mosquitto.conf
+
 ```bash
 nano config/mosquitto.conf
 ```
 
 Basic configuration file content below including websocket config
+
 ```
 allow_anonymous false
 listener 1883
@@ -47,7 +50,6 @@ touch config/pwfile
 ## 5. Create docker-compose file called 'docker-compose.yml'
 
 ```yml
-
 version: "3.7"
 services:
   # mqtt5 eclipse-mosquitto
@@ -72,8 +74,8 @@ volumes:
 networks:
   default:
     name: mqtt5-network
-
 ```
+
 ### 5.1 Public facing Mosquitto Websocket Server with Free SSL using Caddy Server
 
 > [!NOTE]  
@@ -84,14 +86,16 @@ networks:
 
 #### Setting up CaddyServer
 
-Lets check the steps for setting it up  
+Lets check the steps for setting it up
+
 - Create folders for Caddy data and config
-- Configure DNS with A record pointing to your MQTT public IP address  
+- Configure DNS with A record pointing to your MQTT public IP address
 - Create a config file called 'Caddyfile'
 - Create a combined docker-compose file with Caddy + Mosquitto
-- Create containers using docker-compose run 
+- Create containers using docker-compose run
 
 #### Create folders for Caddy
+
 ```bash
 # Caddy data & config files where certificates etc are stored
 mkdir caddy_data
@@ -99,22 +103,28 @@ mkdir caddy_config
 ```
 
 #### DNS Setup
+
 ```bash
 # Create a DNS A/AAAA record pointing your domain to the public IP address
 mqtt.domain.com  A  <public-IP-address-for-MQTT-instance>
 ```
-Make sure to wait for the DNS record to complete propagation (depending on TTL). Otherwise automatic SSL creation would not work. 
+
+Make sure to wait for the DNS record to complete propagation (depending on TTL). Otherwise automatic SSL creation would not work.
 
 #### Caddyfile for configuration
+
 Caddy uses 2 volumes for data (storing certificates etc) & config.  
 Create a file called 'Caddyfile' in the local folder for configuration, which will be mapped to /etc/caddy/Caddyfile through docker-compose file as below.
 
-#### Content of configuration file called 'Caddyfile' 
+#### Content of configuration file called 'Caddyfile'
+
 ```bash
 # Config file in the current folder
 touch Caddyfile
 ```
+
 _Add below content to `Caddyfile`_ created above.
+
 ```
 mqtt.domain.com {
         reverse_proxy ws://mqtt5:9001
@@ -122,6 +132,7 @@ mqtt.domain.com {
 ```
 
 #### Combined docker-compose.yml
+
 ```yaml
 version: "3.7"
 services:
@@ -167,12 +178,15 @@ networks:
 ```
 
 ```bash
-# MQTT Connection URL would be 
+# MQTT Connection URL would be
 # WSS => Websocket Secure with SSL
 wss://mqtt.domain.com:443
 ```
+
 #### Using MQTTX Client
+
 ![alt text](mqttx-client.png)
+
 </details>
 
 ## 6. Create and run docker container for MQTT
@@ -198,6 +212,9 @@ sudo docker ps
 # login interactively into the mqtt container
 sudo docker exec -it <container-id> sh
 
+# In order to edit file as root
+chown :root /mosquitto/config/pwfile
+
 # Create new password file and add user and it will prompt for password
 mosquitto_passwd -c /mosquitto/config/pwfile user1
 
@@ -212,6 +229,7 @@ mosquitto_passwd -D /mosquitto/config/pwfile <user-name-to-delete>
 ```
 
 Command line help for `mosquitto_passwd` command above
+
 ```
 mosquitto_passwd is a tool for managing password files for mosquitto.
 
@@ -226,7 +244,8 @@ Usage: mosquitto_passwd [-H sha512 | -H sha512-pbkdf2] [-c | -D] passwordfile us
  -U : update a plain text password file to use hashed passwords
 ```
 
-Then restart the container 
+Then restart the container
+
 ```bash
 sudo docker restart <container-id>
 ```
@@ -234,6 +253,7 @@ sudo docker restart <container-id>
 ## 8. Time to test !!!
 
 ### Install mosquitto client tools for testing
+
 ```bash
 
 sudo apt install mosquitto-clients
@@ -266,28 +286,33 @@ mosquitto_pub -t 'hello/topic' -m 'hello MQTT'
 # With authentication
 mosquitto_pub -t 'hello/topic' -m 'hello MQTT' -u user1 -P <password>
 
-# Alternate way in url format 
+# Alternate way in url format
 # Format => mqtt(s)://[username[:password]@]host[:port]/topic
 mosquitto_pub -L mqtt://user1:abc123@localhost/test/topic -m 'hello MQTT'
 
 ```
+
 ## You can find C/C++ code for mosquitto client
+
 Check [main.cpp](main.cpp) for the mosquitto client code.
 
 ## You can also install a nice MQTT Web Client
-Read more about it here => https://mqttx.app/  
+
+Read more about it here => https://mqttx.app/
 
 ```bash
 sudo docker run -d --name mqttx-web -p 80:80 emqx/mqttx-web
 ```
 
 ## Source/Reference for Mosquitto
+
 Github => https://github.com/eclipse/mosquitto
 
 ##
-![Static Badge](https://img.shields.io/badge/SPONSORING-red?style=for-the-badge)    
+
+![Static Badge](https://img.shields.io/badge/SPONSORING-red?style=for-the-badge)  
 If you use my projects or like them, consider sponsoring me. Anything helps and encourages me to keep going.  
-See details here: https://github.com/sponsors/sukesh-ak  
+See details here: https://github.com/sponsors/sukesh-ak
 
 Your sponsorship would help me not only maintain the projects I'm involved in, but also support my other community activities and purchase hardware for testing these libraries. If you're an individual user who has enjoyed my projects or benefited from my community work, please consider donating as a sign of appreciation. If you run a business that uses my work in your products, sponsoring my development makes good business sense: it ensures that the projects your product relies on stay healthy and actively maintained.
 
